@@ -1,0 +1,8 @@
+language: php
+php:
+  - '7.0'
+
+install:
+  - make install
+
+script: make lint test
