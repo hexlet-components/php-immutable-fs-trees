@@ -38,10 +38,10 @@ function map($func, $tree)
         $children = $node['children'] ?? [];
 
         if ($node['type'] == 'directory') {
-            $updateChildren = array_map(function ($n) use (&$f, &$map) {
+            $updatedChildren = array_map(function ($n) use (&$f, &$map) {
                 return $map($f, $n);
             }, $children);
-            return array_merge($updatedNode, ['children' => $updateChildren]);
+            return array_merge($updatedNode, ['children' => $updatedChildren]);
         }
 
         return $updatedNode;
@@ -73,4 +73,35 @@ function reduce($func, $tree, $accumulator)
     };
 
     return $reduce($func, $tree, $accumulator);
+}
+
+/**
+ * Filter tree
+ */
+function filter($func, $tree)
+{
+    $filter = function ($f, $node) use (&$filter) {
+        if (!$f($node)) {
+            return null;
+        }
+
+        $children = $node['children'];
+
+        if ($node['type'] == 'directory') {
+            $updatedChildren = array_map(function ($n) use (&$f, &$filter) {
+                 return $filter($f, $n);
+            }, $children);
+
+            $filteredChildren = array_filter($updatedChildren, function ($n) {
+                if ($n != null) {
+                    return $n;
+                }
+            });
+            return array_merge($node, ['children' => $filteredChildren]);
+        }
+
+        return $node;
+    };
+
+    return $filter($func, $tree);
 }

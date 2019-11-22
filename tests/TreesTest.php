@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use function PhpTrees\Trees\mkdir;
 use function PhpTrees\Trees\mkfile;
 use function PhpTrees\Trees\map;
+use function PhpTrees\Trees\filter;
 use function PhpTrees\Trees\reduce;
 
 class TreesTest extends TestCase
@@ -115,5 +116,58 @@ class TreesTest extends TestCase
             return $n['type'] == 'directory' ? $acc + 1 : $acc;
         }, $tree, 0);
         $this->assertEquals(4, $actual3);
+    }
+
+    public function testFilter()
+    {
+        $tree = mkdir('/', [
+            mkdir('etc', [
+                mkdir('nginx', [
+                    mkdir('conf.d'),
+                ]),
+                mkdir('consul', [
+                    mkfile('config.json'),
+                ]),
+              ]),
+              mkfile('hosts'),
+        ]);
+
+        $actual = filter(function ($n) {
+            return $n['type'] == 'directory';
+        }, $tree);
+
+        $expected = [
+            'children' => [
+              [
+                'children' => [
+                  [
+                    'children' => [[
+                      'children' => [],
+                      'meta' => [],
+                      'name' => 'conf.d',
+                      'type' => 'directory',
+                    ]],
+                    'meta' => [],
+                    'name' => 'nginx',
+                    'type' => 'directory',
+                  ],
+                  [
+                    'children' => [],
+                    'meta' => [],
+                    'name' => 'consul',
+                    'type' => 'directory',
+                  ],
+                ],
+                'meta' => [],
+                'name' => 'etc',
+                'type' => 'directory',
+              ],
+            ],
+            'meta' => [],
+            'name' => '/',
+            'type' => 'directory',
+        ];
+
+        $this->assertEquals($expected, $actual);
     }
 }
