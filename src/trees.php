@@ -85,7 +85,7 @@ function filter($func, $tree)
             return null;
         }
 
-        $children = $node['children'];
+        $children = $node['children'] ?? null;
 
         if ($node['type'] == 'directory') {
             $updatedChildren = array_map(function ($n) use (&$f, &$filter) {
