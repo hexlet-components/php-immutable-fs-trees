@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpPoints\tests;
+namespace PhpTrees\tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -166,6 +166,40 @@ class TreesTest extends TestCase
             'meta' => [],
             'name' => '/',
             'type' => 'directory',
+        ];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testFilter2()
+    {
+        $tree = mkdir('/', [
+            mkdir('etc', [
+                mkdir('nginx', [
+                    mkdir('conf.d'),
+                ]),
+                mkdir('consul', [
+                    mkfile('config.json'),
+                ]),
+            ]),
+            mkfile('hosts'),
+        ]);
+
+        $names = ['/', 'hosts'];
+
+        $actual = filter(function ($n) use ($names) {
+            return in_array($n['name'], $names);
+        }, $tree);
+
+        $expected = [
+            'name' => '/',
+            'children' => [[
+                'name' => 'hosts',
+                'meta' => [],
+                'type' => 'file'
+            ]],
+            'meta' => [],
+            'type' => 'directory'
         ];
 
         $this->assertEquals($expected, $actual);

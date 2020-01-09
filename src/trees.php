@@ -85,11 +85,11 @@ function filter($func, $tree)
             return null;
         }
 
-        $children = $node['children'];
+        $children = $node['children'] ?? null;
 
         if ($node['type'] == 'directory') {
             $updatedChildren = array_map(function ($n) use (&$f, &$filter) {
-                 return $filter($f, $n);
+                return $filter($f, $n);
             }, $children);
 
             $filteredChildren = array_filter($updatedChildren, function ($n) {
@@ -97,7 +97,7 @@ function filter($func, $tree)
                     return $n;
                 }
             });
-            return array_merge($node, ['children' => $filteredChildren]);
+            return array_merge($node, ['children' => array_values($filteredChildren)]);
         }
 
         return $node;
