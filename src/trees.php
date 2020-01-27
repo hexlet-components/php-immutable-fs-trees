@@ -28,6 +28,22 @@ function mkfile(string $name, array $meta = [])
 }
 
 /**
+ * Test directory
+ */
+function isFile($node)
+{
+    return $node['type'] == 'file';
+}
+
+/**
+ * Test file
+ */
+function isDirectory($node)
+{
+    return $node['type'] == 'directory';
+}
+
+/**
  * Map tree
  */
 function map($func, $tree)
@@ -37,7 +53,7 @@ function map($func, $tree)
 
         $children = $node['children'] ?? [];
 
-        if ($node['type'] == 'directory') {
+        if (isDirectory($node)) {
             $updatedChildren = array_map(function ($n) use (&$f, &$map) {
                 return $map($f, $n);
             }, $children);
@@ -59,7 +75,7 @@ function reduce($func, $tree, $accumulator)
         $children = $node['children'] ?? [];
         $newAcc = $f($acc, $node);
 
-        if ($node['type'] == 'file') {
+        if (isFile($node)) {
             return $newAcc;
         }
 
@@ -87,7 +103,7 @@ function filter($func, $tree)
 
         $children = $node['children'] ?? null;
 
-        if ($node['type'] == 'directory') {
+        if (isDirectory($node)) {
             $updatedChildren = array_map(function ($n) use (&$f, &$filter) {
                 return $filter($f, $n);
             }, $children);

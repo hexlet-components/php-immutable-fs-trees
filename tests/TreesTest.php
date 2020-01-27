@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 use function PhpTrees\Trees\mkdir;
 use function PhpTrees\Trees\mkfile;
+use function PhpTrees\Trees\isDirectory;
+use function PhpTrees\Trees\isFile;
 use function PhpTrees\Trees\map;
 use function PhpTrees\Trees\filter;
 use function PhpTrees\Trees\reduce;
@@ -42,6 +44,18 @@ class TreesTest extends TestCase
         ];
 
         $this->assertEquals($expected, $tree);
+    }
+
+    public function testFile()
+    {
+        $file = mkfile('robots.txt');
+        $this->assertTrue(isFile($file));
+    }
+
+    public function testDirectory()
+    {
+        $directory = mkdir('/');
+        $this->assertTrue(isDirectory($directory));
     }
 
     public function testMap()
