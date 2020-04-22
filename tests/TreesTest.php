@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 use function PhpTrees\Trees\mkdir;
 use function PhpTrees\Trees\mkfile;
+use function PhpTrees\Trees\getName;
+use function PhpTrees\Trees\getMeta;
+use function PhpTrees\Trees\getChildren;
 use function PhpTrees\Trees\isDirectory;
 use function PhpTrees\Trees\isFile;
 use function PhpTrees\Trees\map;
@@ -44,6 +47,43 @@ class TreesTest extends TestCase
         ];
 
         $this->assertEquals($expected, $tree);
+    }
+
+    public function testGetMeta()
+    {
+        $file = mkfile('etc', ['owner' => 'root']);
+        $this->assertEquals(['owner' => 'root'], getMeta($file));
+    }
+
+    public function testGetName()
+    {
+        $file = mkfile('etc');
+        $this->assertEquals('etc', getName($file));
+    }
+
+    public function testGetChildren()
+    {
+        $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
+        $expected = [
+          [
+            'children' => [],
+            'meta' => [],
+            'name' => 'etc',
+            'type' => 'directory',
+          ],
+          [
+            'children' => [],
+            'meta' => [],
+            'name' => 'usr',
+            'type' => 'directory',
+          ],
+          [
+            'meta' => [],
+            'name' => 'robots.txt',
+            'type' => 'file',
+          ],
+        ];
+        $this->assertEquals($expected, getChildren($tree));
     }
 
     public function testFile()

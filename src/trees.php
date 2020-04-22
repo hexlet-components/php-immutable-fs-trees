@@ -27,6 +27,40 @@ function mkfile(string $name, array $meta = [])
     ];
 }
 
+
+/**
+ * Return children
+ * @example
+ * getChildren(mkdir('etc')); // []
+ * getChildren(mkdir('etc', [mkfile('name')])); // [<file>]
+ */
+function getChildren($node)
+{
+    return $node['children'];
+}
+
+/**
+ * Return meta
+ * @example
+ * getMeta(mkfile('etc')); // []
+ * getMeta(mkfile('etc', ['owner' => 'root'])); // ['owner' => 'root']
+ */
+function getMeta($node)
+{
+    return $node['meta'];
+}
+
+/**
+ * Return name
+ * @example
+ * getName(mkfile('etc')); // etc
+ * getName(mkdir('/')); // /
+ */
+function getName($node)
+{
+    return $node['name'];
+}
+
 /**
  * Test directory
  */
