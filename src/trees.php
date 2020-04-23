@@ -78,6 +78,27 @@ function isDirectory($node)
 }
 
 /**
+ * return flatten tree
+ * @example
+ * array_filter([1]); // [1];
+ * array_filter([1, 2, [3, 4]]); // [1, 2, 3, 4];
+ */
+function array_flatten($tree)
+{
+    if (!is_array($tree)) {
+        return false;
+    }
+    $result = [];
+    foreach ($tree as $key => $value) {
+        if (is_array($value)) {
+            $result = array_merge($result, array_flatten($value));
+        } else {
+            $result[] = $value;
+        }
+    }
+    return $result;
+}
+/**
  * Map tree
  */
 function map($func, $tree)
