@@ -11,7 +11,7 @@ use function PhpTrees\Trees\getMeta;
 use function PhpTrees\Trees\getChildren;
 use function PhpTrees\Trees\isDirectory;
 use function PhpTrees\Trees\isFile;
-use function PhpTrees\Trees\array_flatten;
+use function PhpTrees\Trees\flatten_depth;
 use function PhpTrees\Trees\map;
 use function PhpTrees\Trees\filter;
 use function PhpTrees\Trees\reduce;
@@ -99,12 +99,14 @@ class TreesTest extends TestCase
         $this->assertTrue(isDirectory($directory));
     }
 
-    public function testArrayFlatten()
+    public function testFlattenDepth()
     {
         $tree = [1, 2, [3, [4, 5], [6, 7], 8]];
-        $this->assertEquals([], array_flatten([]));
-        $this->assertEquals([1], array_flatten([1]));
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], array_flatten($tree));
+        $this->assertEquals([], flatten_depth([]));
+        $this->assertEquals([1], flatten_depth([1]));
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], flatten_depth($tree));
+        $this->assertEquals([1, 2, 3, [4, 5], [6, 7], 8], flatten_depth($tree, 1));
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], flatten_depth($tree, 2));
     }
 
     public function testMap()

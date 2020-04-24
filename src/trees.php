@@ -78,26 +78,26 @@ function isDirectory($node)
 }
 
 /**
- * return flatten tree
+ * Recursively flatten `tree` up to `depth` times.
  * @example
- * array_filter([1]); // [1];
- * array_filter([1, 2, [3, 4]]); // [1, 2, 3, 4];
+ * flatten_depth([1]); // [1];
+ * flatten_depth([1, 2, [3, 4]]); // [1, 2, 3, 4];
+ * flatten_depth([1, [2, [3, 4]]], 1); // [1, 2, [3, 4]];
  */
-function array_flatten($tree)
+function flatten_depth($tree, $depth = 0)
 {
-    if (!is_array($tree)) {
-        return false;
-    }
     $result = [];
     foreach ($tree as $key => $value) {
-        if (is_array($value)) {
-            $result = array_merge($result, array_flatten($value));
+        if ($depth >= 0 && is_array($value)) {
+            $value = flatten_depth($value, $depth > 1 ? $depth - 1 : 0 - $depth);
+            $result = array_merge($result, $value);
         } else {
             $result[] = $value;
         }
     }
     return $result;
 }
+
 /**
  * Map tree
  */
