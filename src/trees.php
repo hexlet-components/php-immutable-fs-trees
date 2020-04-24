@@ -84,12 +84,12 @@ function isDirectory($node)
  * flatten_depth([1, 2, [3, 4]]); // [1, 2, 3, 4];
  * flatten_depth([1, [2, [3, 4]]], 1); // [1, 2, [3, 4]];
  */
-function flatten_depth($tree, $depth = 0)
+function array_flatten($tree, $depth = 0)
 {
     $result = [];
     foreach ($tree as $key => $value) {
         if ($depth >= 0 && is_array($value)) {
-            $value = flatten_depth($value, $depth > 1 ? $depth - 1 : 0 - $depth);
+            $value = array_flatten($value, $depth > 1 ? $depth - 1 : 0 - $depth);
             $result = array_merge($result, $value);
         } else {
             $result[] = $value;
