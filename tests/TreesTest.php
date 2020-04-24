@@ -99,12 +99,14 @@ class TreesTest extends TestCase
         $this->assertTrue(isDirectory($directory));
     }
 
-    public function testArrayFlatten()
+    public function testFlattenDepth()
     {
         $tree = [1, 2, [3, [4, 5], [6, 7], 8]];
         $this->assertEquals([], array_flatten([]));
         $this->assertEquals([1], array_flatten([1]));
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], array_flatten($tree));
+        $this->assertEquals([1, 2, 3, [4, 5], [6, 7], 8], array_flatten($tree, 1));
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], array_flatten($tree, 3));
     }
 
     public function testMap()
