@@ -11,7 +11,6 @@ $ composer require hexlet/pairs
 ## Usage example
 
 ```php
-
 use function PhpTrees\Trees\mkdir;
 use function PhpTrees\Trees\mkfile;
 use function PhpTrees\Trees\getName;
