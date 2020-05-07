@@ -1,6 +1,6 @@
 # php-immutable-fs-trees
 
-[![github action status](https://github.com/hexlet-components/js-immutable-fs-trees/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-components/js-immutable-fs-trees/actions)
+[![github action status](https://github.com/hexlet-components/php-immutable-fs-trees/workflows/master/badge.svg)]((https://github.com/hexlet-components/php-immutable-fs-trees/workflows/master/badge.svg))
 
 ## Install
 
@@ -24,22 +24,14 @@ isDirectory(mkdir('etc')); // true
 
 $tree = mkdir('etc', 'children' => [mkfile('config'), mkfile('hosts')]);
 
-$callbackFn = function($node) {
-  $name = getName($node);
-  const $newName = strtoupper($name);
-  return { ...node, name: newName };
-};
-
-map(fn($node) => strtoupper(getName($node)), $tree);
-// {
-//   name: 'ETC',
-//   children: [
-//     { name: 'CONFIG', meta: {}, type: 'file' },
-//     { name: 'HOSTS', meta: {}, type: 'file' }
-//   ],
-//   meta: {},
-//   type: 'directory',
-// }
+map(fn($node) => array_merge($node, ['name' => strtoupper(getName($node))]), $tree);
+// [
+//    name => 'ETC',
+//    children => [
+//        [ name => 'CONFIG', meta => [], type => 'file' ],
+//        [ name => 'HOSTS', meta => [], type => 'file' ]
+//    ],
+//    meta => [],
+//    type => 'directory'
+// ]
 ```
-
-For more information, see the [Full Documentation](https://github.com/hexlet-components/js-immutable-fs-trees/tree/master/docs)
