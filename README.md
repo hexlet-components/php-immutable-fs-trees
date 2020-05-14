@@ -6,6 +6,7 @@
 
 ```php
 <?php
+
 use function PhpTrees\Trees\mkdir;
 use function PhpTrees\Trees\mkfile;
 use function PhpTrees\Trees\getName;
@@ -18,6 +19,7 @@ use function PhpTrees\Trees\map;
 
 ```php
 <?php
+
 isFile(mkfile('config')); // true
 isDirectory(mkdir('etc')); // true
 
