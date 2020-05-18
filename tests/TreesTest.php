@@ -167,9 +167,7 @@ class TreesTest extends TestCase
             mkfile('hOsts'),
         ]);
 
-        $actual = reduce(function ($acc) {
-            return $acc + 1;
-        }, $tree, 0);
+        $actual = reduce(fn($acc) => $acc + 1, $tree, 0);
         $this->assertEquals(6, $actual);
 
         $actual2 = reduce(function ($acc, $n) {
@@ -177,9 +175,7 @@ class TreesTest extends TestCase
         }, $tree, 0);
         $this->assertEquals(2, $actual2);
 
-        $actual3 = reduce(function ($acc, $n) {
-            return $n['type'] == 'directory' ? $acc + 1 : $acc;
-        }, $tree, 0);
+        $actual3 = reduce(fn($acc, $n) => $n['type'] == 'directory' ? $acc + 1 : $acc, $tree, 0);
         $this->assertEquals(4, $actual3);
     }
 
@@ -197,9 +193,7 @@ class TreesTest extends TestCase
               mkfile('hosts'),
         ]);
 
-        $actual = filter(function ($n) {
-            return $n['type'] == 'directory';
-        }, $tree);
+        $actual = filter(fn($n) => $n['type'] == 'directory', $tree);
 
         $expected = [
             'children' => [
@@ -252,10 +246,7 @@ class TreesTest extends TestCase
 
         $names = ['/', 'hosts'];
 
-        $actual = filter(function ($n) use ($names) {
-            return in_array($n['name'], $names);
-        }, $tree);
-
+        $actual = filter(fn($n) => in_array($n['name'], $names), $tree);
         $expected = [
             'name' => '/',
             'children' => [[
