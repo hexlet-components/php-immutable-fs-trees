@@ -130,9 +130,7 @@ function map($func, $tree)
     $children = $tree['children'] ?? [];
 
     if (isDirectory($tree)) {
-        $updatedChildren = array_map(function ($node) use ($func) {
-            return map($func, $node);
-        }, $children);
+        $updatedChildren = array_map(fn($node) => map($func, $node), $children);
         return array_merge($updatedNode, ['children' => $updatedChildren]);
     }
 
@@ -157,9 +155,7 @@ function reduce($func, $tree, $accumulator)
 
     return array_reduce(
         $children,
-        function ($acc, $node) use ($func) {
-            return reduce($func, $node, $acc);
-        },
+        fn($acc, $node) => reduce($func, $node, $acc),
         $newAcc
     );
 }
@@ -179,15 +175,8 @@ function filter($func, $tree)
     $children = $tree['children'] ?? null;
 
     if (isDirectory($tree)) {
-        $updatedChildren = array_map(function ($node) use ($func) {
-            return filter($func, $node);
-        }, $children);
-
-        $filteredChildren = array_filter($updatedChildren, function ($node) {
-            if ($node != null) {
-                return $node;
-            }
-        });
+        $updatedChildren = array_map(fn($node) => filter($func, $node), $children);
+        $filteredChildren = array_filter($updatedChildren);
         return array_merge($tree, ['children' => array_values($filteredChildren)]);
     }
 
