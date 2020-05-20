@@ -2,7 +2,9 @@
 
 [![github action status](https://github.com/hexlet-components/php-immutable-fs-trees/workflows/master/badge.svg)]((https://github.com/hexlet-components/php-immutable-fs-trees/workflows/master/badge.svg))
 
-## Functions for working with Trees
+Functions for working with trees.
+
+## Examples
 
 ```php
 <?php
@@ -13,12 +15,6 @@ use function PhpTrees\Trees\getName;
 use function PhpTrees\Trees\isDirectory;
 use function PhpTrees\Trees\isFile;
 use function PhpTrees\Trees\map;
-```
-
-## Examples
-
-```php
-<?php
 
 isFile(mkfile('config')); // true
 isDirectory(mkdir('etc')); // true
