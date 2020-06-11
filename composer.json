@@ -18,7 +18,7 @@
     },
     "scripts": {
         "phpcs": "phpcs",
-        "phpunit": "phpunit --colors=always",
+        "phpunit": "phpunit",
         "test": "phpunit tests"
     },
     "autoload": {
