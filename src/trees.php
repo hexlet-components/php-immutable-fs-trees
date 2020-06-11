@@ -126,22 +126,15 @@ function array_flatten($tree, $depth = 0)
  */
 function map($func, $tree)
 {
-    $map = function ($f, $node) use (&$map) {
-        $updatedNode = $f($node);
+    $updatedNode = $func($tree);
+    $children = $tree['children'] ?? [];
 
-        $children = $node['children'] ?? [];
+    if (isDirectory($tree)) {
+        $updatedChildren = array_map(fn($node) => map($func, $node), $children);
+        return array_merge($updatedNode, ['children' => $updatedChildren]);
+    }
 
-        if (isDirectory($node)) {
-            $updatedChildren = array_map(function ($n) use (&$f, &$map) {
-                return $map($f, $n);
-            }, $children);
-            return array_merge($updatedNode, ['children' => $updatedChildren]);
-        }
-
-        return $updatedNode;
-    };
-
-    return $map($func, $tree);
+    return $updatedNode;
 }
 
 /**
@@ -153,24 +146,18 @@ function map($func, $tree)
  */
 function reduce($func, $tree, $accumulator)
 {
-    $reduce = function ($f, $node, $acc) use (&$reduce) {
-        $children = $node['children'] ?? [];
-        $newAcc = $f($acc, $node);
+    $children = $tree['children'] ?? [];
+    $newAcc = $func($accumulator, $tree);
 
-        if (isFile($node)) {
-            return $newAcc;
-        }
+    if (isFile($tree)) {
+        return $newAcc;
+    }
 
-        return array_reduce(
-            $children,
-            function ($iAcc, $n) use (&$reduce, &$f) {
-                return $reduce($f, $n, $iAcc);
-            },
-            $newAcc
-        );
-    };
-
-    return $reduce($func, $tree, $accumulator);
+    return array_reduce(
+        $children,
+        fn($acc, $node) => reduce($func, $node, $acc),
+        $newAcc
+    );
 }
 
 /**
@@ -181,28 +168,17 @@ function reduce($func, $tree, $accumulator)
  */
 function filter($func, $tree)
 {
-    $filter = function ($f, $node) use (&$filter) {
-        if (!$f($node)) {
-            return null;
-        }
+    if (!$func($tree)) {
+        return null;
+    }
 
-        $children = $node['children'] ?? null;
+    $children = $tree['children'] ?? null;
 
-        if (isDirectory($node)) {
-            $updatedChildren = array_map(function ($n) use (&$f, &$filter) {
-                return $filter($f, $n);
-            }, $children);
+    if (isDirectory($tree)) {
+        $updatedChildren = array_map(fn($node) => filter($func, $node), $children);
+        $filteredChildren = array_filter($updatedChildren);
+        return array_merge($tree, ['children' => array_values($filteredChildren)]);
+    }
 
-            $filteredChildren = array_filter($updatedChildren, function ($n) {
-                if ($n != null) {
-                    return $n;
-                }
-            });
-            return array_merge($node, ['children' => array_values($filteredChildren)]);
-        }
-
-        return $node;
-    };
-
-    return $filter($func, $tree);
+    return $tree;
 }
