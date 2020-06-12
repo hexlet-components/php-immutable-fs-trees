@@ -19,7 +19,7 @@ use function PhpTrees\Trees\map;
 isFile(mkfile('config')); // true
 isDirectory(mkdir('etc')); // true
 
-$tree = mkdir('etc', 'children' => [mkfile('config'), mkfile('hosts')]);
+$tree = mkdir('etc', [mkfile('config'), mkfile('hosts')]);
 
 map(fn($node) => array_merge($node, ['name' => strtoupper(getName($node))]), $tree);
 // [
