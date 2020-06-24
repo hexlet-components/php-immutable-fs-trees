@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTrees\Trees;
+namespace Php\Immutable\Fs\Trees\trees;
 
 /**
  * Make directory node

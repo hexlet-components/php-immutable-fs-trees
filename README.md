@@ -9,12 +9,12 @@ Functions for working with trees.
 ```php
 <?php
 
-use function PhpTrees\Trees\mkdir;
-use function PhpTrees\Trees\mkfile;
-use function PhpTrees\Trees\getName;
-use function PhpTrees\Trees\isDirectory;
-use function PhpTrees\Trees\isFile;
-use function PhpTrees\Trees\map;
+use function Php\Immutable\Fs\Trees\trees\mkdir;
+use function Php\Immutable\Fs\Trees\trees\mkfile;
+use function Php\Immutable\Fs\Trees\trees\getName;
+use function Php\Immutable\Fs\Trees\trees\isDirectory;
+use function Php\Immutable\Fs\Trees\trees\isFile;
+use function Php\Immutable\Fs\Trees\trees\map;
 
 isFile(mkfile('config')); // true
 isDirectory(mkdir('etc')); // true

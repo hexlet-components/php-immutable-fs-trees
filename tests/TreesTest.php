@@ -1,20 +1,20 @@
 <?php
 
-namespace PhpTrees\tests;
+namespace Php\Immutable\Fs\Trees\tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function PhpTrees\Trees\mkdir;
-use function PhpTrees\Trees\mkfile;
-use function PhpTrees\Trees\getName;
-use function PhpTrees\Trees\getMeta;
-use function PhpTrees\Trees\getChildren;
-use function PhpTrees\Trees\isDirectory;
-use function PhpTrees\Trees\isFile;
-use function PhpTrees\Trees\array_flatten;
-use function PhpTrees\Trees\map;
-use function PhpTrees\Trees\filter;
-use function PhpTrees\Trees\reduce;
+use function Php\Immutable\Fs\Trees\trees\mkdir;
+use function Php\Immutable\Fs\Trees\trees\mkfile;
+use function Php\Immutable\Fs\Trees\trees\getName;
+use function Php\Immutable\Fs\Trees\trees\getMeta;
+use function Php\Immutable\Fs\Trees\trees\getChildren;
+use function Php\Immutable\Fs\Trees\trees\isDirectory;
+use function Php\Immutable\Fs\Trees\trees\isFile;
+use function Php\Immutable\Fs\Trees\trees\array_flatten;
+use function Php\Immutable\Fs\Trees\trees\map;
+use function Php\Immutable\Fs\Trees\trees\filter;
+use function Php\Immutable\Fs\Trees\trees\reduce;
 
 class TreesTest extends TestCase
 {
