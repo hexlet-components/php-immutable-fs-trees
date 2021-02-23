@@ -2,7 +2,7 @@
     "name": "hexlet/trees",
     "description": "Trees implementation",
     "license": "MIT",
-    "keywords": ["hexlet, trees"],
+    "keywords": ["hexlet", "trees"],
     "authors": [
         {
             "name": "Sergey Karpuk",
