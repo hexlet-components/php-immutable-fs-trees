@@ -18,7 +18,6 @@ use function Php\Immutable\Fs\Trees\trees\reduce;
 
 class TreesTest extends TestCase
 {
-
     public function testMake()
     {
         $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
