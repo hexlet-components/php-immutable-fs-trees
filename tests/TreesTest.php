@@ -18,7 +18,7 @@ use function Php\Immutable\Fs\Trees\trees\reduce;
 
 class TreesTest extends TestCase
 {
-    public function testMake()
+    public function testMake(): void
     {
         $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
         $expected = [
@@ -49,19 +49,19 @@ class TreesTest extends TestCase
         $this->assertEquals($expected, $tree);
     }
 
-    public function testGetMeta()
+    public function testGetMeta(): void
     {
         $file = mkfile('etc', ['owner' => 'root']);
         $this->assertEquals(['owner' => 'root'], getMeta($file));
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $file = mkfile('etc');
         $this->assertEquals('etc', getName($file));
     }
 
-    public function testGetChildren()
+    public function testGetChildren(): void
     {
         $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
         $expected = [
@@ -86,19 +86,19 @@ class TreesTest extends TestCase
         $this->assertEquals($expected, getChildren($tree));
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $file = mkfile('robots.txt');
         $this->assertTrue(isFile($file));
     }
 
-    public function testDirectory()
+    public function testDirectory(): void
     {
         $directory = mkdir('/');
         $this->assertTrue(isDirectory($directory));
     }
 
-    public function testFlattenDepth()
+    public function testFlattenDepth(): void
     {
         $tree = [1, 2, [3, [4, 5], [6, 7], 8]];
         $this->assertEquals([], array_flatten([]));
@@ -108,7 +108,7 @@ class TreesTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8], array_flatten($tree, 3));
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $tree = mkdir('/', [
             mkdir('eTc', [
@@ -154,7 +154,7 @@ class TreesTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $tree = mkdir('/', [
             mkdir('eTc', [
@@ -178,7 +178,7 @@ class TreesTest extends TestCase
         $this->assertEquals(4, $actual3);
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $tree = mkdir('/', [
             mkdir('etc', [
@@ -229,7 +229,7 @@ class TreesTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testFilter2()
+    public function testFilter2(): void
     {
         $tree = mkdir('/', [
             mkdir('etc', [

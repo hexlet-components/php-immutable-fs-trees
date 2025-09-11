@@ -9,7 +9,7 @@ namespace Php\Immutable\Fs\Trees\trees;
  * @param array $meta
  * @return array
  */
-function mkdir(string $name, array $children = [], array $meta = [])
+function mkdir(string $name, array $children = [], array $meta = []): array
 {
     return [
         "name" => $name,
@@ -25,7 +25,7 @@ function mkdir(string $name, array $children = [], array $meta = [])
  * @param array $meta
  * @return array
  */
-function mkfile(string $name, array $meta = [])
+function mkfile(string $name, array $meta = []): array
 {
     return [
         "name" => $name,
@@ -43,7 +43,7 @@ function mkfile(string $name, array $meta = [])
  * getChildren(mkdir('etc')); // []
  * getChildren(mkdir('etc', [mkfile('name')])); // [<file>]
  */
-function getChildren($node)
+function getChildren($node): array
 {
     return $node['children'];
 }
@@ -56,7 +56,7 @@ function getChildren($node)
  * getMeta(mkfile('etc')); // []
  * getMeta(mkfile('etc', ['owner' => 'root'])); // ['owner' => 'root']
  */
-function getMeta($node)
+function getMeta($node): array
 {
     return $node['meta'];
 }
@@ -69,7 +69,7 @@ function getMeta($node)
  * getName(mkfile('etc')); // etc
  * getName(mkdir('/')); // /
  */
-function getName($node)
+function getName($node): string
 {
     return $node['name'];
 }
@@ -79,7 +79,7 @@ function getName($node)
  * @param array $node
  * @return boolean
  */
-function isFile($node)
+function isFile($node): bool
 {
     return $node['type'] == 'file';
 }
@@ -89,7 +89,7 @@ function isFile($node)
  * @param array $node
  * @return boolean
  */
-function isDirectory($node)
+function isDirectory($node): bool
 {
     return $node['type'] == 'directory';
 }
@@ -124,7 +124,7 @@ function array_flatten($tree, $depth = 0)
  * @param array $tree
  * @return array
  */
-function map($func, $tree)
+function map($func, $tree): array
 {
     $updatedNode = $func($tree);
     $children = $tree['children'] ?? [];
@@ -144,7 +144,7 @@ function map($func, $tree)
  * @param mixed $accumulator
  * @return mixed
  */
-function reduce($func, $tree, $accumulator)
+function reduce($func, $tree, $accumulator): mixed
 {
     $children = $tree['children'] ?? [];
     $newAcc = $func($accumulator, $tree);
@@ -164,9 +164,9 @@ function reduce($func, $tree, $accumulator)
  * Filter tree
  * @param callable $func
  * @param array $tree
- * @return array
+ * @return ?array
  */
-function filter($func, $tree)
+function filter($func, $tree): ?array
 {
     if (!$func($tree)) {
         return null;
