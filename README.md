@@ -1,6 +1,6 @@
 # php-immutable-fs-trees
 
-[![github action status](https://github.com/hexlet-components/php-immutable-fs-trees/workflows/PHP%20CI/badge.svg)](../../actions)
+[![github action status](https://github.com/hexlet-components/php-immutable-fs-trees/workflows/PHP%20CI/badge.svg)](https://github.com/hexlet-components/php-immutable-fs-trees/actions)
 
 Functions for working with trees.
 
