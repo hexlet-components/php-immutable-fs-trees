@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Immutable\Fs\Trees\trees;
 
 /**
@@ -12,10 +14,10 @@ namespace Php\Immutable\Fs\Trees\trees;
 function mkdir(string $name, array $children = [], array $meta = []): array
 {
     return [
-        "name" => $name,
-        "children" => $children,
-        "meta" => $meta,
-        "type" => "directory",
+        'name' => $name,
+        'children' => $children,
+        'meta' => $meta,
+        'type' => 'directory',
     ];
 }
 
@@ -28,12 +30,11 @@ function mkdir(string $name, array $children = [], array $meta = []): array
 function mkfile(string $name, array $meta = []): array
 {
     return [
-        "name" => $name,
-        "meta" => $meta,
-        "type" => "file",
+        'name' => $name,
+        'meta' => $meta,
+        'type' => 'file',
     ];
 }
-
 
 /**
  * Return children
@@ -153,11 +154,7 @@ function reduce($func, $tree, $accumulator): mixed
         return $newAcc;
     }
 
-    return array_reduce(
-        $children,
-        fn($acc, $node) => reduce($func, $node, $acc),
-        $newAcc
-    );
+    return array_reduce($children, fn($acc, $node) => reduce($func, $node, $acc), $newAcc);
 }
 
 /**

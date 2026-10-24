@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Immutable\Fs\Trees\tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Php\Immutable\Fs\Trees\trees\mkdir;
-use function Php\Immutable\Fs\Trees\trees\mkfile;
-use function Php\Immutable\Fs\Trees\trees\getName;
-use function Php\Immutable\Fs\Trees\trees\getMeta;
+use function Php\Immutable\Fs\Trees\trees\array_flatten;
+use function Php\Immutable\Fs\Trees\trees\filter;
 use function Php\Immutable\Fs\Trees\trees\getChildren;
+use function Php\Immutable\Fs\Trees\trees\getMeta;
+use function Php\Immutable\Fs\Trees\trees\getName;
 use function Php\Immutable\Fs\Trees\trees\isDirectory;
 use function Php\Immutable\Fs\Trees\trees\isFile;
-use function Php\Immutable\Fs\Trees\trees\array_flatten;
 use function Php\Immutable\Fs\Trees\trees\map;
-use function Php\Immutable\Fs\Trees\trees\filter;
+use function Php\Immutable\Fs\Trees\trees\mkdir;
+use function Php\Immutable\Fs\Trees\trees\mkfile;
 use function Php\Immutable\Fs\Trees\trees\reduce;
 
 class TreesTest extends TestCase
@@ -22,28 +24,28 @@ class TreesTest extends TestCase
     {
         $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
         $expected = [
-        'children' => [
-          [
-            'children' => [],
+            'children' => [
+                [
+                    'children' => [],
+                    'meta' => [],
+                    'name' => 'etc',
+                    'type' => 'directory',
+                ],
+                [
+                    'children' => [],
+                    'meta' => [],
+                    'name' => 'usr',
+                    'type' => 'directory',
+                ],
+                [
+                    'meta' => [],
+                    'name' => 'robots.txt',
+                    'type' => 'file',
+                ],
+            ],
             'meta' => [],
-            'name' => 'etc',
+            'name' => '/',
             'type' => 'directory',
-          ],
-          [
-            'children' => [],
-            'meta' => [],
-            'name' => 'usr',
-            'type' => 'directory',
-          ],
-          [
-            'meta' => [],
-            'name' => 'robots.txt',
-            'type' => 'file',
-          ],
-        ],
-        'meta' => [],
-        'name' => '/',
-        'type' => 'directory',
         ];
 
         $this->assertEquals($expected, $tree);
@@ -65,23 +67,23 @@ class TreesTest extends TestCase
     {
         $tree = mkdir('/', [mkdir('etc'), mkdir('usr'), mkfile('robots.txt')]);
         $expected = [
-          [
-            'children' => [],
-            'meta' => [],
-            'name' => 'etc',
-            'type' => 'directory',
-          ],
-          [
-            'children' => [],
-            'meta' => [],
-            'name' => 'usr',
-            'type' => 'directory',
-          ],
-          [
-            'meta' => [],
-            'name' => 'robots.txt',
-            'type' => 'file',
-          ],
+            [
+                'children' => [],
+                'meta' => [],
+                'name' => 'etc',
+                'type' => 'directory',
+            ],
+            [
+                'children' => [],
+                'meta' => [],
+                'name' => 'usr',
+                'type' => 'directory',
+            ],
+            [
+                'meta' => [],
+                'name' => 'robots.txt',
+                'type' => 'file',
+            ],
         ];
         $this->assertEquals($expected, getChildren($tree));
     }
@@ -121,35 +123,36 @@ class TreesTest extends TestCase
         ]);
 
         $expected = [
-          'children' => [
-            [
-              'children' => [
+            'children' => [
                 [
-                  'children' => [], 'meta' => [], 'name' => 'NGINX', 'type' => 'directory',
+                    'children' => [
+                        [
+                            'children' => [],
+                            'meta' => [],
+                            'name' => 'NGINX',
+                            'type' => 'directory',
+                        ],
+                        [
+                            'children' => [
+                                ['meta' => [], 'name' => 'CONFIG.JSON', 'type' => 'file'],
+                            ],
+                            'meta' => [],
+                            'name' => 'CONSUL',
+                            'type' => 'directory',
+                        ],
+                    ],
+                    'meta' => [],
+                    'name' => 'ETC',
+                    'type' => 'directory',
                 ],
-                [
-                  'children' => [
-                    ['meta' => [], 'name' => 'CONFIG.JSON', 'type' => 'file']
-                  ],
-                  'meta' => [],
-                  'name' => 'CONSUL',
-                  'type' => 'directory',
-                ],
-              ],
-              'meta' => [],
-              'name' => 'ETC',
-              'type' => 'directory',
+                ['meta' => [], 'name' => 'HOSTS', 'type' => 'file'],
             ],
-            ['meta' => [], 'name' => 'HOSTS', 'type' => 'file'],
-          ],
-          'meta' => [],
-          'name' => '/',
-          'type' => 'directory',
+            'meta' => [],
+            'name' => '/',
+            'type' => 'directory',
         ];
 
-        $actual = map(function ($n) {
-            return array_merge($n, ['name' => strtoupper($n['name'])]);
-        }, $tree);
+        $actual = map(static fn($n) => array_merge($n, ['name' => strtoupper($n['name'])]), $tree);
 
         $this->assertEquals($expected, $actual);
     }
@@ -166,15 +169,13 @@ class TreesTest extends TestCase
             mkfile('hOsts'),
         ]);
 
-        $actual = reduce(fn($acc) => $acc + 1, $tree, 0);
+        $actual = reduce(static fn($acc) => $acc + 1, $tree, 0);
         $this->assertEquals(6, $actual);
 
-        $actual2 = reduce(function ($acc, $n) {
-            return $n['type'] == 'file' ? $acc + 1 : $acc;
-        }, $tree, 0);
+        $actual2 = reduce(static fn($acc, $n) => $n['type'] == 'file' ? $acc + 1 : $acc, $tree, 0);
         $this->assertEquals(2, $actual2);
 
-        $actual3 = reduce(fn($acc, $n) => $n['type'] == 'directory' ? $acc + 1 : $acc, $tree, 0);
+        $actual3 = reduce(static fn($acc, $n) => $n['type'] == 'directory' ? $acc + 1 : $acc, $tree, 0);
         $this->assertEquals(4, $actual3);
     }
 
@@ -188,38 +189,38 @@ class TreesTest extends TestCase
                 mkdir('consul', [
                     mkfile('config.json'),
                 ]),
-              ]),
-              mkfile('hosts'),
+            ]),
+            mkfile('hosts'),
         ]);
 
-        $actual = filter(fn($n) => $n['type'] == 'directory', $tree);
+        $actual = filter(static fn($n) => $n['type'] == 'directory', $tree);
 
         $expected = [
             'children' => [
-              [
-                'children' => [
-                  [
-                    'children' => [[
-                      'children' => [],
-                      'meta' => [],
-                      'name' => 'conf.d',
-                      'type' => 'directory',
-                    ]],
+                [
+                    'children' => [
+                        [
+                            'children' => [[
+                                'children' => [],
+                                'meta' => [],
+                                'name' => 'conf.d',
+                                'type' => 'directory',
+                            ]],
+                            'meta' => [],
+                            'name' => 'nginx',
+                            'type' => 'directory',
+                        ],
+                        [
+                            'children' => [],
+                            'meta' => [],
+                            'name' => 'consul',
+                            'type' => 'directory',
+                        ],
+                    ],
                     'meta' => [],
-                    'name' => 'nginx',
+                    'name' => 'etc',
                     'type' => 'directory',
-                  ],
-                  [
-                    'children' => [],
-                    'meta' => [],
-                    'name' => 'consul',
-                    'type' => 'directory',
-                  ],
                 ],
-                'meta' => [],
-                'name' => 'etc',
-                'type' => 'directory',
-              ],
             ],
             'meta' => [],
             'name' => '/',
@@ -245,16 +246,16 @@ class TreesTest extends TestCase
 
         $names = ['/', 'hosts'];
 
-        $actual = filter(fn($n) => in_array($n['name'], $names), $tree);
+        $actual = filter(static fn($n) => in_array($n['name'], $names, strict: true), $tree);
         $expected = [
             'name' => '/',
             'children' => [[
                 'name' => 'hosts',
                 'meta' => [],
-                'type' => 'file'
+                'type' => 'file',
             ]],
             'meta' => [],
-            'type' => 'directory'
+            'type' => 'directory',
         ];
 
         $this->assertEquals($expected, $actual);
