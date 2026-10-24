@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/hexlet-components/php-immutable-fs-trees/compare/v2.0.0...v2.0.1) (2026-10-24)
+
+
+### Miscellaneous Chores
+
+* **guardrails:** hk, commitlint, typos, rumdl, lychee, betterleaks, osv-scanner ([8f50f35](https://github.com/hexlet-components/php-immutable-fs-trees/commit/8f50f3560433c11c4812179e5bc64f5563df5e68))
+
 ## [2.0.0](https://github.com/hexlet-components/php-immutable-fs-trees/compare/v1.1.0...v2.0.0) (2026-08-18)
 
 
